@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+    <!-- [START css] -->
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.css">
+    <!-- [END css] -->
+    <style type="text/css">
+      body {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #f5f5f5;
+      }
+      blockquote {
+        margin-bottom: 10px;
+        border-left-color: #bbb;
+      }
+      form {
+        margin-top: 10px;
+      }
+      .form-signin input[type="text"] {
+        font-size: 16px;
+        height: auto;
+        margin-bottom: 15px;
+        padding: 7px 9px;
+      }
+      .row {
+        margin-left: 0;
+        margin-top: 10px;
+        overflow: scroll;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">Web Application Project - ASI</a>
+          <div class="nav-collapse collapse pull-right">
+            <a href="{{ url|safe }}" class="btn">{{ url_linktext }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+
+		<br/>
+	  <br/>
+	  <br/>
+      <strong> WELCOME! </strong>
+      <br/>
+      <br/>
+      You are using the Web Application Project - ASI.
+      <br/>
+      <br/>
+      <br/>
+		
+		{% if flag == 1  %}
+		<br/>
+		<br/>
+ 			You, <strong> {{ user.email() }}</strong>, are checked in room:<strong>
+ 			{{ choice_room.room_sala[1] }} &#8594 {{ choice_room.room_piso[1] }} &#8594 {{ choice_room.room_edificio[1] }} &#8594  {{ choice_room.room_campus[1] }}
+ 			</strong>
+ 				{{ choice_room.room_user }} 
+ 		<br/>
+ 		<br/>
+ 		<br/>
+  		<form action = "/checkout" method ="get">
+  			<label>Do you want to check out?</label>
+  			<input type="hidden" name="choice_out" value="{{ choice_room.key.id() }}">
+  			<input class="button1" type="submit" value="Check Out">
+  		</form>
+  		<br/>
+  		<br/>
+  		
+  		{% else %}
+  		<br/>
+		<br/>
+ 			You, <strong> {{ user.email() }}</strong>, are not checked in in any room.
+ 		{% endif %}	
+  		<br/>
+ 		<br/>
+ 		<br/>
+ 		<br/>
+ 		<br/>
+ 		<br/>
+ 		<br/>
+  		
+      <form action="/checkin" method="POST">
+          <td>
+          {% if flag == 1 %}
+          <label>Do you want to check in in another room? If yes, you will automatically be checked out of this one</label>
+          {% else %}
+          <label>Where are you studying?</label>
+          {% endif %}
+            <select name="choice" id="choice" width="300px" >
+              {% for o in out_available %}
+               	<option value="{{ o.key.id() }}" SELECTED> {{ o.room_sala[1] }} &#8594 {{ o.room_piso[1] }} &#8594 {{ o.room_edificio[1] }} &#8594  {{ o.room_campus[1] }}</option>
+              {% endfor %}
+              </select>
+              </td>
+            <td>
+              <input class="button1" type="submit" value="Select">
+            </td>
+       </form>
+
+ 
+ 	{% if flag == 0 %}
+      <form action="/listUsers" method="GET">
+          <td>
+          <label>Do you want to see a list of the users in a certain room?</label>
+
+            <select name="roomUsers" id="roomUsers" width="300px" >
+              {% for o in out_available %}
+               	<option value="{{ o.key.id() }}" SELECTED> {{ o.room_sala[1] }} &#8594 {{ o.room_piso[1] }} &#8594 {{ o.room_edificio[1] }} &#8594  {{ o.room_campus[1] }}</option>
+              {% endfor %}
+              </select>
+              </td>
+            <td>
+              <input class="button1" type="submit" value="Select">
+            </td>
+          </form>
+          <form action="/findUsers" method="GET">
+          <td>
+            Write the name of the user you want to locate: <br>
+            <input type="text" name="username">  		<input type="submit" value="Select">
+            </td>
+          </form>
+            
+   		{% endif %}
+      <a href="{{ url|safe }}">{{ url_linktext }}</a>
+    </div>
+  </body>
+</html>
+{% endautoescape %}

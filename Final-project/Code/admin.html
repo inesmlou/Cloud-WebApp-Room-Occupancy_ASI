@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+  
+    <script>
+ function SelectElement(selectElementId, valueToSelect)
+{
+    var element = document.getElementById(selectElementId);
+
+    element.value = valueToSelect;
+    alert("4");
+}   
+    
+var ai = 0;
+window.onload = function () 
+{
+
+		window.onload = function () {};
+};
+
+	function myFunction() {
+		document.getElementById("Botedificios").disabled = true;
+		document.getElementById("Botpisos").disabled = true;
+		document.getElementById("Botsalas").disabled = true;
+		alert("11");
+				myFunction = function(){};
+	}
+	function Libertaedificios() {
+		document.getElementById("Botedificios").disabled = false;
+		document.getElementById("Botedificios").enabled = true;
+		window.onload = function () {};
+		myFunction = function(){};
+	}	
+
+	</script>
+	
+    <!-- [START css] -->
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.css">
+    <!-- [END css] -->
+    <style type="text/css">
+      body {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #f5f5f5;
+      }
+      blockquote {
+        margin-bottom: 10px;
+        border-left-color: #bbb;
+      }
+      form {
+        margin-top: 10px;
+      }
+      .form-signin input[type="text"] {
+        font-size: 16px;
+        height: auto;
+        margin-bottom: 15px;
+        padding: 7px 9px;
+      }
+      .row {
+        margin-left: 0px;
+        margin-top: 10px;
+        overflow: scroll;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">Web Application Project - ASI</a>
+          <div class="nav-collapse collapse pull-right">
+            <a href="{{ url|safe }}" class="btn">{{ url_linktext }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      
+      <br/>
+	  <br/>
+	  <br/>
+      <strong> WELCOME! </strong>
+      <br/>
+      <br/>
+      You are using the Web Application Project - ASI.
+      <br/>
+      <br/>
+      <br/>
+    
+
+       <form action="/edificios" method="POST">
+          <td>
+          <label>Choose Campus:</label>
+            <select name="campus" id="campus" width="300px" >
+              {% for o1 in out_campus %}
+				 {% if o1 == selected_value_campus %}
+	               	<option value="{{ o1 }}" SELECTED>{{ o1.name }}</option>
+				  {% else %}
+	               	<option value="{{ o1 }}" >{{ o1.name }}</option>
+				  {% endif %}
+
+
+              {% endfor %}
+              </select>
+              </td>
+            <td>
+              <input id = 'Botcampus' class="button1" type="submit" value="Select" onclick="Libertaedificios()">
+            </td>
+       </form>
+      
+    
+       <form action="/pisos" method="POST">
+          <td>
+          <label>Choose Building:</label>
+            <select name="building" id="building" width="300px" >
+              {% for o2 in out_edificios['containedSpaces'] %}
+               	{% if o2 == selected_value_building %}}</option>
+					<option value="{{ o2 }}" SELECTED>{{ o2.name }}
+				{% else %}	
+					<option value="{{ o2 }}" >{{ o2.name }}
+				{% endif %}
+              {% endfor %}
+              </select>
+              </td>
+            <td>
+              <input type="hidden" name="campus" value="{{ campus }}">
+              <input id = "Botedificios" class="button1" type="submit" value="Select">
+            </td>
+       </form>
+      
+      
+       
+       <form action="/salas" method="POST">
+          <td>
+          <label>Choose Floor:</label>
+            <select name="floor" id="floor" width="300px" >
+              {% for o3 in out_pisos['containedSpaces'] %}
+               	{% if o3 == selected_value_pisos %}}</option>
+	               	<option value="{{ o3 }}" SELECTED>{{ o3.name }}</option>
+				{% else %}	
+	               	<option value="{{ o3 }}" >{{ o3.name }}</option>
+				{% endif %}
+              {% endfor %}
+              </select>
+              </td>
+            <td>
+              <input type="hidden" name="campus" value="{{ campus }}">
+              <input type="hidden" name="building" value="{{ building }}">
+              <input id = "Botpisos" class="button1" type="submit" value="Select">
+            </td>
+       </form>
+       
+       
+       <form action="/fim" method="POST">
+          <td>
+          <label>Choose Room:</label>
+            <select name="room" id="room" width="300px" >
+              {% for o4 in out_salas['containedSpaces'] %}
+               	<option value="{{ o4 }}" SELECTED>{{ o4.name }}</option>
+              {% endfor %}
+              </select>
+              </td>
+            <td>
+              <input type="hidden" name="campus" value="{{ campus }}">
+              <input type="hidden" name="building" value="{{ building }}">
+              <input type="hidden" name="floor" value="{{ floor }}">
+              <input id="Botsalas" class="button1" type="submit" value="Select">
+            </td>
+       </form>
+<script>
+	var i = 0;
+	var counts = {{occ_vec}};
+</script>       
+       <br/>
+       <br/>
+       {% if existing_room == 1 %}
+       <p>Room already available</p>
+       {% endif %}
+       <br/>
+       <br/>
+       <br/>
+       <strong> Rooms available: </strong>
+   		<br/>
+   		<br/>
+		<div>
+			<table  border="1" style="float: left">
+			<tr>
+				<td width="500"><strong>Room</strong></td>
+			</tr>			
+			{% for space in out_available %}
+               	<tr><td> {{ space.room_sala[1] }} &#8594 {{ space.room_piso[1] }} &#8594 {{ space.room_edificio[1] }} &#8594  {{ space.room_campus[1] }}  </td></tr>
+             {% endfor %}
+		  </table>
+		  <table  border="1" >
+			<tr>
+				<td width="100"><strong>Occupancy</strong></td>
+			</tr>
+				{% for v in occ_vec %}
+	        	<tr><td> {{ v }}<td></tr>
+            {% endfor %}
+		  </table>
+		</div>   		
+		Nº de salas = {{len_occ_vec}}
+	   <br/>
+	   
+       <br/>
+       <br/>
+      <a href="{{ url|safe }}">{{ url_linktext }}</a>
+    </div>
+  </body>
+</html>
+<script>
+	  function myFunction() {};
+</script>
+{% endautoescape %}
